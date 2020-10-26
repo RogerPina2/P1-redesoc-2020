@@ -1,5 +1,5 @@
 from csv import reader
-
+import numpy as np
 from unidecode import unidecode
 
 
@@ -39,7 +39,7 @@ def main():
                 # Aqui é checado se o deputado não está sendo adicionado em
                 # seu próprio dicionário
                 if deputado != deputado_:
-                    deputados[deputado]["votos"][deputado_] = 0
+                    deputados[deputado]["votos"][deputado_] = { "numero_votos": 0, "votos_positivos" : 0, "votos_negativos" : 0 }
 
 
     # Abre arquivo para leitura.
@@ -125,8 +125,11 @@ def main():
 
                         # Aqui é usada a relação entre proposições e seus autores 
                         # para atribuir um voto para um dado deputado
-                        deputados[id_deputado]["votos"][voto_para] += voto
-
+                        deputados[id_deputado]["votos"][voto_para]["numero_votos"] += 1
+                        if voto == 1:
+                            deputados[id_deputado]["votos"][voto_para]["votos_positivos"] += 1
+                        elif voto == -1:
+                            deputados[id_deputado]["votos"][voto_para]["votos_negativos"] += 1
 
 
     with open('deputados.gml', 'w') as file:
@@ -143,10 +146,6 @@ def main():
         # strings, não esqueça as aspas duplas (isso vale para o id também).
         # Não esqueça também da indentação. Ela não é necessária mas ajuda
         # a deixar mais legível.
-        #
-        # O módulo unidecode converte todo caractere não-ASCII para o
-        # caractere ASCII mais próximo. Isso é necessário porque a
-        # especificação do formato gml exige que ele seja ASCII.
         for n in deputados.keys():
             file.write('  node [\n')
             file.write('    id {}\n'.format(n))
@@ -162,7 +161,10 @@ def main():
         for n in deputados.keys():
             for deputado in deputados[n]["votos"]:
                 if deputados[n]["votos"][deputado] != 0:
-                    peso = deputados[n]["votos"][deputado]
+                    numero_votos = deputados[n]["votos"][deputado]["numero_votos"]
+                    votos_positivos = deputados[n]["votos"][deputado]["votos_positivos"]
+                    votos_negativos = deputados[n]["votos"][deputado]["votos_negativos"]
+                    peso = votos_positivos
                     file.write('  edge [\n')
                     file.write('    source {}\n'.format(n))
                     file.write('    target {}\n'.format(deputado))

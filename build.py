@@ -1,13 +1,12 @@
 from csv import reader
 import numpy as np
 from unidecode import unidecode
+from constantes import ano_final, ano_inicial
 
 
-def main():
+def extrai_deputados():
 
     deputados = {}
-    proposicoes = {}
-    votacoes = {}
 
     # Abre arquivo dos deputados para leitura.
     with open('Arquivos Limpos/deputados.csv') as file:
@@ -41,9 +40,14 @@ def main():
                 if deputado != deputado_:
                     deputados[deputado]["votos"][deputado_] = { "numero_votos": 0, "votos_positivos" : 0, "votos_negativos" : 0 }
 
+    return deputados
 
+
+def extrai_proposicoesAutores(ano):
+    ano = str(ano)
+    proposicoes = {}
     # Abre arquivo para leitura.
-    with open('Arquivos Limpos/proposicoesAutores.csv') as file:
+    with open('Arquivos Limpos/proposicoesAutores-' + ano + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -62,8 +66,15 @@ def main():
             # Os dados são guardados com int para maoir facilidade de manuseio
             proposicoes[int(float(id_proposicao))] = int(float(id_deputado))
 
+    return proposicoes
+
+
+def extrai_votacoes(ano):
+    ano = str(ano)
+    votacoes = {}
+
     # Abre arquivo para leitura.
-    with open('Arquivos Limpos/votacoes.csv') as file:
+    with open('Arquivos Limpos/votacoes-' + ano + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -85,8 +96,14 @@ def main():
                 # que seu autor não é um indivíduo, mas um orgão do governo
                 votacoes[id_votacao] = id_proposicao
 
+    return votacoes
+
+
+def relaciona(ano, deputados, proposicoes, votacoes):
+    ano = str(ano)
+
     # Abre arquivo para leitura.
-    with open('Arquivos Limpos/votacoesVotos.csv') as file:
+    with open('Arquivos Limpos/votacoesVotos-' + ano + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -106,7 +123,7 @@ def main():
 
             # O id do deputado é a quarta coluna
             id_deputado = int(row[3])
-
+            
             # É checado se se a relação das tabelas votações e votaçõesVotos está
             # correta
             if id_votacao in votacoes:
@@ -121,18 +138,24 @@ def main():
 
                     # É checado se o voto de um deputado não é direciona a ele
                     # mesmo
+                    
                     if id_deputado != voto_para:
+                        if id_deputado in deputados and voto_para in deputados:
+                            # Aqui é usada a relação entre proposições e seus autores 
+                            # para atribuir um voto para um dado deputado
+                            deputados[id_deputado]["votos"][voto_para]["numero_votos"] += 1
+                            if voto == 1:
+                                deputados[id_deputado]["votos"][voto_para]["votos_positivos"] += 1
+                            elif voto == -1:
+                                deputados[id_deputado]["votos"][voto_para]["votos_negativos"] += 1
 
-                        # Aqui é usada a relação entre proposições e seus autores 
-                        # para atribuir um voto para um dado deputado
-                        deputados[id_deputado]["votos"][voto_para]["numero_votos"] += 1
-                        if voto == 1:
-                            deputados[id_deputado]["votos"][voto_para]["votos_positivos"] += 1
-                        elif voto == -1:
-                            deputados[id_deputado]["votos"][voto_para]["votos_negativos"] += 1
+    return deputados
 
 
-    with open('deputados.gml', 'w') as file:
+def cria_gml(ano, deputados):
+    ano = str(ano)
+
+    with open('deputados-' + ano + '.gml', 'w') as file:
 
         # Primeira linha, que abre os colchetes da rede.
         file.write('graph [\n')
@@ -164,7 +187,7 @@ def main():
                     numero_votos = deputados[n]["votos"][deputado]["numero_votos"]
                     votos_positivos = deputados[n]["votos"][deputado]["votos_positivos"]
                     votos_negativos = deputados[n]["votos"][deputado]["votos_negativos"]
-                    peso = votos_positivos
+                    peso = votos_positivos - votos_negativos
                     file.write('  edge [\n')
                     file.write('    source {}\n'.format(n))
                     file.write('    target {}\n'.format(deputado))
@@ -172,61 +195,18 @@ def main():
                     file.write('  ]\n')
 
         # Última linha, que fecha os colchetes da rede.
-        file.write(']\n')
+        file.write(']\n') 
 
+def main():
 
-    lista = [73788,
-    74044,
-    74270,
-    74317,
-    74400,
-    74574,
-    74646,
-    74848,
-    90201,
-    98057,
-    122158,
-    122974,
-    133439,
-    133968,
-    136811,
-    141405,
-    141422,
-    141518,
-    160545,
-    160575,
-    160587,
-    160601,
-    160632,
-    178854,
-    178860,
-    178861,
-    178909,
-    178910,
-    178959,
-    178981,
-    178990,
-    204353,
-    204359,
-    204369,
-    204389,
-    204395,
-    204418,
-    204430,
-    204476,
-    204480,
-    204486,
-    204512,
-    204523,
-    204527,
-    204532,
-    204556,
-    207309]
+    deputados = extrai_deputados()
 
-    for i in lista:
-
-        print(deputados[i]["nome"])
-                    
+    for ano in range(ano_inicial, ano_final+1):
+        deputados_ = deputados.copy()
+        proposicoes = extrai_proposicoesAutores(ano)
+        votacoes = extrai_votacoes(ano)
+        relaciona(ano,deputados_, proposicoes, votacoes)    
+        cria_gml(ano, deputados_)           
 
 if __name__ == '__main__':
     main()

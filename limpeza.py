@@ -71,7 +71,7 @@ def limpa_deputados(comeco, fim):
     db_deputados = db_deputados.applymap(limpa_string)
     db_deputados.rename(columns={ 'uri' : 'deputado_id' }, inplace=True)
 
-    db_deputados.to_csv('Arquivos Limpos/deputados.csv', encoding='utf-8')
+    db_deputados.to_csv('ArquivosLimpos/deputados.csv', encoding='utf-8')
 
 
 def limpa_votacoes(ano):
@@ -96,7 +96,7 @@ def limpa_votacoes(ano):
     votacoes.drop(to_drop, inplace=True, axis=1)
     votacoes.dropna(inplace=True,axis=0)
 
-    votacoes.to_csv('Arquivos Limpos/votacoes-' + ano + '.csv', encoding='utf-8')
+    votacoes.to_csv('ArquivosLimpos/votacoes-' + ano + '.csv', encoding='utf-8')
 
 def limpa_todas_votacoes(inicio, fim):
     for ano in range(inicio, fim+1):
@@ -120,7 +120,7 @@ def limpa_votacoesVotos(ano):
     votacoesVotos = votacoesVotos.applymap(limpa_string)
     votacoesVotos.rename(columns={ 'deputado_uriPartido' : 'pardido_id' }, inplace=True)
 
-    votacoesVotos.to_csv('Arquivos Limpos/votacoesVotos-' + ano + '.csv', encoding='utf-8')
+    votacoesVotos.to_csv('ArquivosLimpos/votacoesVotos-' + ano + '.csv', encoding='utf-8')
 
 def limpa_todas_votacoesVotos(inicio, fim):
     for ano in range(inicio, fim+1):
@@ -147,7 +147,7 @@ def limpa_proposicoesAutores(ano):
     proposicoesAutores.dropna(inplace=True,axis=0)
 
     
-    proposicoesAutores.to_csv('Arquivos Limpos/proposicoesAutores-' + ano + '.csv', encoding='utf-8')
+    proposicoesAutores.to_csv('ArquivosLimpos/proposicoesAutores-' + ano + '.csv', encoding='utf-8')
 
 def limpa_todas_proposicoesAutores(inicio, fim):
     for ano in range(inicio, fim+1):

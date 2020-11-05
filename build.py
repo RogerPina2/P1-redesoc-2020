@@ -9,7 +9,7 @@ def extrai_deputados():
     deputados = {}
 
     # Abre arquivo dos deputados para leitura.
-    with open('Arquivos Limpos/deputados.csv') as file:
+    with open('ArquivosLimpos/deputados.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -47,7 +47,7 @@ def extrai_proposicoesAutores(ano):
     ano = str(ano)
     proposicoes = {}
     # Abre arquivo para leitura.
-    with open('Arquivos Limpos/proposicoesAutores-' + ano + '.csv') as file:
+    with open('ArquivosLimpos/proposicoesAutores-' + ano + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -74,7 +74,7 @@ def extrai_votacoes(ano):
     votacoes = {}
 
     # Abre arquivo para leitura.
-    with open('Arquivos Limpos/votacoes-' + ano + '.csv') as file:
+    with open('ArquivosLimpos/votacoes-' + ano + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -103,7 +103,7 @@ def relaciona(ano, deputados, proposicoes, votacoes):
     ano = str(ano)
 
     # Abre arquivo para leitura.
-    with open('Arquivos Limpos/votacoesVotos-' + ano + '.csv') as file:
+    with open('ArquivosLimpos/votacoesVotos-' + ano + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.

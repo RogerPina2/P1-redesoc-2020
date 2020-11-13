@@ -64,6 +64,8 @@ def limpa_deputados(comeco, fim):
     db_deputados = db_deputados.applymap(limpa_string)
     db_deputados.rename(columns={ 'uri' : 'deputado_id' }, inplace=True)
 
+    db_deputados.dropna(inplace=True,axis=0)
+
     db_deputados.to_csv('ArquivosLimpos/deputados.csv', encoding='utf-8', index=False)
 
 def limpa_votacoes(ano):
@@ -111,6 +113,8 @@ def limpa_votacoesVotos(ano):
 
     votacoesVotos = votacoesVotos.applymap(limpa_string)
     votacoesVotos.rename(columns={ 'deputado_uriPartido' : 'pardido_id' }, inplace=True)
+
+    votacoesVotos.dropna(inplace=True,axis=0)
 
     votacoesVotos.to_csv('ArquivosLimpos/votacoesVotos-' + ano + '.csv', encoding='utf-8', index=False)
 
@@ -168,6 +172,8 @@ def limpa_frentes():
     frentes = frentes.drop(columns=to_drop)
 
     frentes = frentes[frentes['deputado_.idLegislatura'] == 55]
+
+    frentes.dropna(inplace=True,axis=0)
 
     frentes.to_csv('ArquivosLimpos/frentes.csv', encoding='utf-8', index=False)
 

@@ -50,7 +50,7 @@ def main():
         deputados_final = pd.merge(deputados_inter,deputados_ec, left_on='deputado_id', right_on=None, right_index=True)
 
 
-        deputados_final.to_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv', encoding='utf-8')
+        deputados_final.to_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     main()

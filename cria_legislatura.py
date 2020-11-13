@@ -27,9 +27,9 @@ def main():
         votacoes = pd.concat(votacoes)
         votacoesVotos = pd.concat(votacoesVotos)
 
-        proposicoes.to_csv('ArquivosLegislatura/proposicoesAutores-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
-        votacoes.to_csv('ArquivosLegislatura/votacoes-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
-        votacoesVotos.to_csv('ArquivosLegislatura/votacoesVotos-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
+        proposicoes.to_csv('ArquivosLimpos/proposicoesAutores-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
+        votacoes.to_csv('ArquivosLimpos/votacoes-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
+        votacoesVotos.to_csv('ArquivosLimpos/votacoesVotos-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
 
         proposicoes = []
         votacoes = []

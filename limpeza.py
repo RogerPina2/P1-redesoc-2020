@@ -38,41 +38,33 @@ def limpa_string(item):
         return item
 
 def limpa_deputados(comeco, fim):
-
-    Legislatura2019 = 56
-    diferenca = 2019 - Legislatura2019
-
-    comeco -= diferenca
-    fim -= diferenca
-
+    
     file_deputados = 'ArquivosCSV/deputados.csv'
     db_deputados = pd.read_csv(file_deputados, delimiter=';')
 
     to_drop = [
+        #uri', 
+        #'nome', 
+        #'idLegislaturaInicial', 
+        #'idLegislaturaFinal',
+        'nomeCivil', 
         'cpf', 
+        #'siglaSexo', 
         'urlRedeSocial', 
-        'urlWebsite', 
-        'dataNascimento',
-        'nome',
-        'nomeCivil',
-        'municipioNascimento',
-        'dataFalecimento',
+        'urlWebsite',
+        'dataNascimento', 
+        'dataFalecimento', 
+        'ufNascimento',
+        'municipioNascimento'
     ]
-            
     db_deputados = db_deputados.drop(columns=to_drop)
-    db_deputados.columns
 
-    start = db_deputados['idLegislaturaFinal'].between(comeco - 3, fim, inclusive=True)
-    db_deputados = db_deputados.loc[start]
-
-    end = db_deputados['idLegislaturaInicial'].between(comeco - 3, fim, inclusive=True)
-    db_deputados = db_deputados.loc[end]
+    db_deputados = db_deputados[(db_deputados['idLegislaturaInicial'] <= 55) & (db_deputados['idLegislaturaFinal'] >= 55)]
 
     db_deputados = db_deputados.applymap(limpa_string)
     db_deputados.rename(columns={ 'uri' : 'deputado_id' }, inplace=True)
 
-    db_deputados.to_csv('ArquivosLimpos/deputados.csv', encoding='utf-8')
-
+    db_deputados.to_csv('ArquivosLimpos/deputados.csv', encoding='utf-8', index=False)
 
 def limpa_votacoes(ano):
     ano = str(ano)
@@ -96,7 +88,7 @@ def limpa_votacoes(ano):
     votacoes.drop(to_drop, inplace=True, axis=1)
     votacoes.dropna(inplace=True,axis=0)
 
-    votacoes.to_csv('ArquivosLimpos/votacoes-' + ano + '.csv', encoding='utf-8')
+    votacoes.to_csv('ArquivosLimpos/votacoes-' + ano + '.csv', encoding='utf-8', index=False)
 
 def limpa_todas_votacoes(inicio, fim):
     for ano in range(inicio, fim+1):
@@ -120,7 +112,7 @@ def limpa_votacoesVotos(ano):
     votacoesVotos = votacoesVotos.applymap(limpa_string)
     votacoesVotos.rename(columns={ 'deputado_uriPartido' : 'pardido_id' }, inplace=True)
 
-    votacoesVotos.to_csv('ArquivosLimpos/votacoesVotos-' + ano + '.csv', encoding='utf-8')
+    votacoesVotos.to_csv('ArquivosLimpos/votacoesVotos-' + ano + '.csv', encoding='utf-8', index=False)
 
 def limpa_todas_votacoesVotos(inicio, fim):
     for ano in range(inicio, fim+1):
@@ -147,12 +139,37 @@ def limpa_proposicoesAutores(ano):
     proposicoesAutores.dropna(inplace=True,axis=0)
 
     
-    proposicoesAutores.to_csv('ArquivosLimpos/proposicoesAutores-' + ano + '.csv', encoding='utf-8')
+    proposicoesAutores.to_csv('ArquivosLimpos/proposicoesAutores-' + ano + '.csv', encoding='utf-8', index=False)
 
 def limpa_todas_proposicoesAutores(inicio, fim):
     for ano in range(inicio, fim+1):
         limpa_proposicoesAutores(ano)
 
+def limpa_frentes():
+
+    file_frentes = 'ArquivosCSV/frentesDeputados.csv'
+    frentes = pd.read_csv(file_frentes, delimiter=';')
+
+    to_drop = [#'id', 
+            'uri', 
+            #'titulo', 
+            #'deputado_.id', 
+            'deputado_.uri',
+            'deputado_.uriPartido', 
+            #'deputado_.nome', 
+            #'deputado_.siglaUf',
+            #'deputado_.idLegislatura',
+            'deputado_.urlFoto', 
+            'deputado_.codTitulo',
+            'deputado_.titulo',
+            'dataInicio', 
+            'dataFim'
+    ]
+    frentes = frentes.drop(columns=to_drop)
+
+    frentes = frentes[frentes['deputado_.idLegislatura'] == 55]
+
+    frentes.to_csv('ArquivosLimpos/frentes.csv', encoding='utf-8', index=False)
 
 def main():
 
@@ -160,6 +177,7 @@ def main():
     limpa_todas_votacoes(ano_inicial, ano_final)
     limpa_todas_votacoesVotos(ano_inicial, ano_final)
     limpa_todas_proposicoesAutores(ano_inicial, ano_final)
+    limpa_frentes()
 
 if __name__ == '__main__':
     main()

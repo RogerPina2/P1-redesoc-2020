@@ -32,8 +32,10 @@ def load(name):
 
 def main():
 
-    for ano in range(ano_inicial, ano_final+1):
-        ano = str(ano)
+    for legislacao in range(ano_inicial, ano_final+1, 4):
+        inicio = str(legislacao)
+        fim = str(legislacao+3)
+
         g = load("deputados")
         bc = nx.betweenness_centrality(g)
         ec = nx.eigenvector_centrality(g, max_iter=10000)
@@ -48,7 +50,7 @@ def main():
         deputados_final = pd.merge(deputados_inter,deputados_ec, left_on='deputado_id', right_on=None, right_index=True)
 
 
-        deputados_final.to_csv('ArquivosLimpos/deputados-' + ano + '.csv', encoding='utf-8')
+        deputados_final.to_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv', encoding='utf-8')
 
 if __name__ == '__main__':
     main()

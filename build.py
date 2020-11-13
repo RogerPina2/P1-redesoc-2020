@@ -19,10 +19,10 @@ def extrai_deputados():
         for i, row in enumerate(reader(file)):
 
             # O id do deputado é a segunda coluna.
-            id_deputado = row[1]
+            id_deputado = row[0]
 
             # O nome do deputado é a terceira coluna.
-            nome_deputado = row[2]
+            nome_deputado = row[1]
 
             # Cada chave do decionário dos deputados é o id de um deles
             # ela é relacionada ao seu nome e aos votos, que é um segundo
@@ -43,11 +43,10 @@ def extrai_deputados():
     return deputados
 
 
-def extrai_proposicoesAutores(ano):
-    ano = str(ano)
+def extrai_proposicoesAutores(inicio, fim):
     proposicoes = {}
     # Abre arquivo para leitura.
-    with open('ArquivosLimpos/proposicoesAutores-' + ano + '.csv') as file:
+    with open('ArquivosLegislatura/proposicoesAutores-' + inicio + '-' + fim + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -57,10 +56,10 @@ def extrai_proposicoesAutores(ano):
         for i, row in enumerate(reader(file)):
 
             # O id da proposição é a segunda coluna
-            id_proposicao = row[1]
+            id_proposicao = row[0]
 
             # O id do deputado é a terceira coluna
-            id_deputado = row[2]
+            id_deputado = row[1]
 
             # Esse dicionário guarda essa relação para ajudar na contrução da rede
             # Os dados são guardados com int para maoir facilidade de manuseio
@@ -69,12 +68,11 @@ def extrai_proposicoesAutores(ano):
     return proposicoes
 
 
-def extrai_votacoes(ano):
-    ano = str(ano)
+def extrai_votacoes(inicio, fim):
     votacoes = {}
 
     # Abre arquivo para leitura.
-    with open('ArquivosLimpos/votacoes-' + ano + '.csv') as file:
+    with open('ArquivosLegislatura/votacoes-' + inicio + '-' + fim + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -84,11 +82,11 @@ def extrai_votacoes(ano):
         for i, row in enumerate(reader(file)):
 
             # O id da proposição é a segunda coluna
-            id_votacao = row[1]
+            id_votacao = row[0]
 
             # O id da proposição é a segunda coluna
             # o dado é transformado em int para maelhor manuseio
-            id_proposicao = int(row[8])
+            id_proposicao = int(row[7])
 
             # Esse dicionário guarda essa relação para ajudar na contrução da rede
             if id_proposicao != 0:
@@ -99,11 +97,10 @@ def extrai_votacoes(ano):
     return votacoes
 
 
-def relaciona(ano, deputados, proposicoes, votacoes):
-    ano = str(ano)
+def relaciona(inicio, fim, deputados, proposicoes, votacoes):
 
     # Abre arquivo para leitura.
-    with open('ArquivosLimpos/votacoesVotos-' + ano + '.csv') as file:
+    with open('ArquivosLegislatura/votacoesVotos-' + inicio + '-' + fim + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -115,14 +112,14 @@ def relaciona(ano, deputados, proposicoes, votacoes):
         for i, row in enumerate(reader(file)):
 
             # O id da votação é a segunda coluna
-            id_votacao = row[1]
+            id_votacao = row[0]
 
             # O id do tipo de voto, -1 para contra, 0 para neutro e 1 para a favor,
             # é a terceira coluna
-            voto = int(row[2])
+            voto = float(row[1])
 
             # O id do deputado é a quarta coluna
-            id_deputado = int(row[3])
+            id_deputado = int(row[2])
             
             # É checado se se a relação das tabelas votações e votaçõesVotos está
             # correta
@@ -152,10 +149,9 @@ def relaciona(ano, deputados, proposicoes, votacoes):
     return deputados
 
 
-def cria_gml(ano, deputados):
-    ano = str(ano)
+def cria_gml(inicio, fim, deputados):
 
-    with open('deputados-' + ano + '.gml', 'w') as file:
+    with open('GML/deputados-' + inicio + '-' + fim + '.gml', 'w') as file:
 
         # Primeira linha, que abre os colchetes da rede.
         file.write('graph [\n')
@@ -201,12 +197,15 @@ def main():
 
     deputados = extrai_deputados()
 
-    for ano in range(ano_inicial, ano_final+1):
+    for legislacao in range(ano_inicial, ano_final+1, 4):
+        inicio = str(legislacao)
+        fim = str(legislacao+3)
+
         deputados_ = deputados.copy()
-        proposicoes = extrai_proposicoesAutores(ano)
-        votacoes = extrai_votacoes(ano)
-        relaciona(ano,deputados_, proposicoes, votacoes)    
-        cria_gml(ano, deputados_)           
+        proposicoes = extrai_proposicoesAutores(inicio, fim)
+        votacoes = extrai_votacoes(inicio, fim)
+        relaciona(inicio, fim ,deputados_, proposicoes, votacoes)    
+        cria_gml(inicio, fim, deputados_)           
 
 if __name__ == '__main__':
     main()

@@ -36,7 +36,7 @@ def main():
         inicio = str(legislacao)
         fim = str(legislacao+3)
 
-        g = load("deputados")
+        g = load("gml/deputados-2015-2018")
         bc = nx.betweenness_centrality(g)
         ec = nx.eigenvector_centrality(g, max_iter=10000)
 

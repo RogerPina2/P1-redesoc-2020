@@ -7,12 +7,12 @@ def main():
         inicio = str(legislacao)
         fim = str(legislacao+3)
 
-        frentes = pd.read_csv('ArquivosLimpos/frentes-' + inicio + '-' + fim + 'csv')
-        deputados = pd.read_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + 'csv')
+        frentes = pd.read_csv('ArquivosLimpos/frentes-' + inicio + '-' + fim + '.csv')
+        deputados = pd.read_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv')
 
         deputados['Frentes'] = deputados['deputado_id'].apply(lambda value: len(frentes.loc[frentes['deputado_.id'] == value]))
 
-        deputados.to_csv('ArquivosLimpos/deputados' + inicio + '-' + fim + 'csv', encoding='utf-8', index=False)       
+        deputados.to_csv('ArquivosLimpos/deputados' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)       
 
 if __name__ == '__main__':
     main()

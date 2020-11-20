@@ -38,10 +38,9 @@ def limpa_string(item):
         return item
 
 def limpa_deputados(comeco, fim):
-    
     file_deputados = 'ArquivosCSV/deputados.csv'
     db_deputados = pd.read_csv(file_deputados, delimiter=';')
-
+    
     to_drop = [
         #uri', 
         #'nome', 
@@ -59,14 +58,17 @@ def limpa_deputados(comeco, fim):
     ]
     db_deputados = db_deputados.drop(columns=to_drop)
 
-    db_deputados = db_deputados[(db_deputados['idLegislaturaInicial'] <= 55) & (db_deputados['idLegislaturaFinal'] >= 55)]
+    legislatura_comeco = get_legislatura(comeco)
+    legislatura_fim = get_legislatura(fim)
+
+    db_deputados = db_deputados[(db_deputados['idLegislaturaInicial'] <= legislatura_comeco) & (db_deputados['idLegislaturaFinal'] >= legislatura_fim)]
 
     db_deputados = db_deputados.applymap(limpa_string)
     db_deputados.rename(columns={ 'uri' : 'deputado_id' }, inplace=True)
 
     db_deputados.dropna(inplace=True,axis=0)
 
-    db_deputados.to_csv('ArquivosLimpos/deputados.csv', encoding='utf-8', index=False)
+    db_deputados.to_csv('ArquivosLimpos/deputados-' + str(comeco) + '-' + str(fim) + ''.csv', encoding='utf-8', index=False)
 
 def limpa_votacoes(ano):
     ano = str(ano)
@@ -141,7 +143,6 @@ def limpa_proposicoesAutores(ano):
 
     proposicoesAutores.drop(to_drop, inplace=True, axis=1)
     proposicoesAutores.dropna(inplace=True,axis=0)
-
     
     proposicoesAutores.to_csv('ArquivosLimpos/proposicoesAutores-' + ano + '.csv', encoding='utf-8', index=False)
 
@@ -149,7 +150,10 @@ def limpa_todas_proposicoesAutores(inicio, fim):
     for ano in range(inicio, fim+1):
         limpa_proposicoesAutores(ano)
 
-def limpa_frentes():
+def limpa_frentes(inicio, fim):
+
+    legislatura_comeco = get_legislatura(comeco)
+    legislatura_fim = get_legislatura(fim)
 
     file_frentes = 'ArquivosCSV/frentesDeputados.csv'
     frentes = pd.read_csv(file_frentes, delimiter=';')
@@ -176,6 +180,20 @@ def limpa_frentes():
     frentes.dropna(inplace=True,axis=0)
 
     frentes.to_csv('ArquivosLimpos/frentes.csv', encoding='utf-8', index=False)
+
+def get_legislatura(ano):
+    
+    if ano >= 2019: return 56
+    elif ano <= 2018 and ano >= 2015: return 55
+    elif ano <= 2014 and ano >= 2011: return 54
+    elif ano <= 2010 and ano >= 2007: return 53
+    elif ano <= 2006 and ano >= 2003: return 52
+    elif ano <= 2002 and ano >= 1999: return 51
+    elif ano <= 1998 and ano >= 1995: return 50
+    else:
+        print('Adicionar mais elifs na função get_legislatura')
+        return None
+
 
 def main():
 

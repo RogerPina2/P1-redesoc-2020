@@ -184,7 +184,7 @@ def limpa_frentes(comeco, fim):
     comeco_ = comeco
     for legislatura in range(legislatura_comeco, legislatura_fim + 1):
             
-        frentes = frentes[(frentes['deputado_.idLegislatura'] >= legislatura) & (frentes['deputado_.idLegislatura'] <= legislatura)]
+        frentes = frentes[frentes['deputado_.idLegislatura'] == legislatura]
 
         frentes.dropna(inplace=True,axis=0)
 
@@ -209,10 +209,10 @@ def get_legislatura(ano):
 
 def main():
 
-    limpa_deputados(ano_inicial, ano_final)
-    limpa_todas_votacoes(ano_inicial, ano_final)
-    limpa_todas_votacoesVotos(ano_inicial, ano_final)
-    limpa_todas_proposicoesAutores(ano_inicial, ano_final)
+    # limpa_deputados(ano_inicial, ano_final)
+    # limpa_todas_votacoes(ano_inicial, ano_final)
+    # limpa_todas_votacoesVotos(ano_inicial, ano_final)
+    # limpa_todas_proposicoesAutores(ano_inicial, ano_final)
     limpa_frentes(ano_inicial, ano_final)
 
 if __name__ == '__main__':

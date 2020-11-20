@@ -180,15 +180,16 @@ def limpa_frentes(comeco, fim):
             'dataFim'
     ]
     frentes = frentes.drop(columns=to_drop)
+    
 
     comeco_ = comeco
     for legislatura in range(legislatura_comeco, legislatura_fim + 1):
-            
-        frentes = frentes[frentes['deputado_.idLegislatura'] == legislatura]
+        frentes_ = frentes.copy()    
+        frentes_ = frentes_[frentes_['deputado_.idLegislatura'] == legislatura]
 
-        frentes.dropna(inplace=True,axis=0)
+        #frentes.dropna(inplace=True,axis=0)
 
-        frentes.to_csv('ArquivosLimpos/frentes-' + str(comeco_) + '-' + str(comeco_+3) + '.csv', encoding='utf-8', index=False)
+        frentes_.to_csv('ArquivosLimpos/frentes-' + str(comeco_) + '-' + str(comeco_+3) + '.csv', encoding='utf-8', index=False)
         
         comeco_ += 4
 
@@ -209,10 +210,10 @@ def get_legislatura(ano):
 
 def main():
 
-    # limpa_deputados(ano_inicial, ano_final)
-    # limpa_todas_votacoes(ano_inicial, ano_final)
-    # limpa_todas_votacoesVotos(ano_inicial, ano_final)
-    # limpa_todas_proposicoesAutores(ano_inicial, ano_final)
+    limpa_deputados(ano_inicial, ano_final)
+    limpa_todas_votacoes(ano_inicial, ano_final)
+    limpa_todas_votacoesVotos(ano_inicial, ano_final)
+    limpa_todas_proposicoesAutores(ano_inicial, ano_final)
     limpa_frentes(ano_inicial, ano_final)
 
 if __name__ == '__main__':

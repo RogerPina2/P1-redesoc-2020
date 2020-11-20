@@ -183,7 +183,7 @@ def cria_gml(inicio, fim, deputados):
                     numero_votos = deputados[n]["votos"][deputado]["numero_votos"]
                     votos_positivos = deputados[n]["votos"][deputado]["votos_positivos"]
                     votos_negativos = deputados[n]["votos"][deputado]["votos_negativos"]
-                    peso = votos_positivos - votos_negativos
+                    peso = votos_positivos
                     file.write('  edge [\n')
                     file.write('    source {}\n'.format(n))
                     file.write('    target {}\n'.format(deputado))

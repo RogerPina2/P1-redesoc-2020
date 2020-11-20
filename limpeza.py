@@ -61,14 +61,20 @@ def limpa_deputados(comeco, fim):
     legislatura_comeco = get_legislatura(comeco)
     legislatura_fim = get_legislatura(fim)
 
-    db_deputados = db_deputados[(db_deputados['idLegislaturaInicial'] <= legislatura_comeco) & (db_deputados['idLegislaturaFinal'] >= legislatura_fim)]
+    comeco_ = comeco
+    for legislatura in range(legislatura_comeco, legislatura_fim + 1):
+        
+        db_deputados = db_deputados[(db_deputados['idLegislaturaInicial'] <= legislatura) & (db_deputados['idLegislaturaFinal'] >= legislatura)]
 
-    db_deputados = db_deputados.applymap(limpa_string)
-    db_deputados.rename(columns={ 'uri' : 'deputado_id' }, inplace=True)
+        db_deputados = db_deputados.applymap(limpa_string)
+        db_deputados.rename(columns={ 'uri' : 'deputado_id' }, inplace=True)
 
-    db_deputados.dropna(inplace=True,axis=0)
+        db_deputados.dropna(inplace=True,axis=0)
 
-    db_deputados.to_csv('ArquivosLimpos/deputados-' + str(comeco) + '-' + str(fim) + ''.csv', encoding='utf-8', index=False)
+        db_deputados.to_csv('ArquivosLimpos/deputados-' + str(comeco_) + '-' + str(comeco_+3) + '.csv', encoding='utf-8', index=False)
+
+        comeco_ += 4
+
 
 def limpa_votacoes(ano):
     ano = str(ano)
@@ -150,7 +156,7 @@ def limpa_todas_proposicoesAutores(inicio, fim):
     for ano in range(inicio, fim+1):
         limpa_proposicoesAutores(ano)
 
-def limpa_frentes(inicio, fim):
+def limpa_frentes(comeco, fim):
 
     legislatura_comeco = get_legislatura(comeco)
     legislatura_fim = get_legislatura(fim)
@@ -175,11 +181,17 @@ def limpa_frentes(inicio, fim):
     ]
     frentes = frentes.drop(columns=to_drop)
 
-    frentes = frentes[frentes['deputado_.idLegislatura'] == 55]
+    comeco_ = comeco
+    for legislatura in range(legislatura_comeco, legislatura_fim + 1):
+            
+        frentes = frentes[(frentes['deputado_.idLegislatura'] >= legislatura) & (frentes['deputado_.idLegislatura'] <= legislatura)]
 
-    frentes.dropna(inplace=True,axis=0)
+        frentes.dropna(inplace=True,axis=0)
 
-    frentes.to_csv('ArquivosLimpos/frentes.csv', encoding='utf-8', index=False)
+        frentes.to_csv('ArquivosLimpos/frentes-' + str(comeco_) + '-' + str(comeco_+3) + '.csv', encoding='utf-8', index=False)
+        
+        comeco_ += 4
+
 
 def get_legislatura(ano):
     
@@ -201,7 +213,7 @@ def main():
     limpa_todas_votacoes(ano_inicial, ano_final)
     limpa_todas_votacoesVotos(ano_inicial, ano_final)
     limpa_todas_proposicoesAutores(ano_inicial, ano_final)
-    limpa_frentes()
+    limpa_frentes(ano_inicial, ano_final)
 
 if __name__ == '__main__':
     main()

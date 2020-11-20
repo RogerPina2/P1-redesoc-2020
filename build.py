@@ -4,12 +4,12 @@ from unidecode import unidecode
 from constantes import ano_final, ano_inicial
 
 
-def extrai_deputados():
+def extrai_deputados(inicio, fim):
 
     deputados = {}
 
     # Abre arquivo dos deputados para leitura.
-    with open('ArquivosLimpos/deputados.csv') as file:
+    with open('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv') as file:
 
         # Lê uma linha do arquivo e não faz nada com ela. Nem sequer joga ela
         # para uma variável. Isso é feito apenas para ignorar o cabeçalho.
@@ -195,17 +195,15 @@ def cria_gml(inicio, fim, deputados):
 
 def main():
 
-    deputados = extrai_deputados()
-
     for legislacao in range(ano_inicial, ano_final+1, 4):
         inicio = str(legislacao)
         fim = str(legislacao+3)
 
-        deputados_ = deputados.copy()
+        deputados = extrai_deputados(inicio, fim)
         proposicoes = extrai_proposicoesAutores(inicio, fim)
         votacoes = extrai_votacoes(inicio, fim)
-        relaciona(inicio, fim ,deputados_, proposicoes, votacoes)    
-        cria_gml(inicio, fim, deputados_)           
+        relaciona(inicio, fim ,deputados, proposicoes, votacoes)    
+        cria_gml(inicio, fim, deputados)           
 
 if __name__ == '__main__':
     main()

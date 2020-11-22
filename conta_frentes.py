@@ -12,7 +12,7 @@ def main():
 
         deputados['Frentes'] = deputados['deputado_id'].apply(lambda value: len(frentes.loc[frentes['deputado_.id'] == value]))
 
-        deputados.to_csv('ArquivosLimpos/deputados' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)       
+        deputados.to_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)       
 
 if __name__ == '__main__':
     main()

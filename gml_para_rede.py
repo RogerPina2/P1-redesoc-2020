@@ -43,10 +43,10 @@ def main():
         rm = nx.reciprocity(g)
 
         print("----------------------")
-        print(rm)
+        print("Reciprocity {}-{}: {}".format(inicio, fim, rm))
         print("----------------------")
 
-        deputados = pd.read_csv('ArquivosLimpos/deputados.csv')
+        deputados = pd.read_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv')
 
         deputados_bc = pd.DataFrame.from_dict(bc, orient='index', dtype=None, columns=["betweenness_centrality"])
         deputados_dc = pd.DataFrame.from_dict(dc, orient='index', dtype=None, columns=["degree_centrality"])

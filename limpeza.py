@@ -39,7 +39,7 @@ def limpa_string(item):
 
 def limpa_deputados(comeco, fim):
     file_deputados = 'ArquivosCSV/deputados.csv'
-    db_deputados = pd.read_csv(file_deputados, delimiter=';')
+    db_deputados_ = pd.read_csv(file_deputados, delimiter=';')
     
     to_drop = [
         #uri', 
@@ -56,7 +56,7 @@ def limpa_deputados(comeco, fim):
         'ufNascimento',
         'municipioNascimento'
     ]
-    db_deputados = db_deputados.drop(columns=to_drop)
+    db_deputados_ = db_deputados_.drop(columns=to_drop)
 
     legislatura_comeco = get_legislatura(comeco)
     legislatura_fim = get_legislatura(fim)
@@ -64,6 +64,7 @@ def limpa_deputados(comeco, fim):
     comeco_ = comeco
     for legislatura in range(legislatura_comeco, legislatura_fim + 1):
         
+        db_deputados = db_deputados_.copy()
         db_deputados = db_deputados[(db_deputados['idLegislaturaInicial'] <= legislatura) & (db_deputados['idLegislaturaFinal'] >= legislatura)]
 
         db_deputados = db_deputados.applymap(limpa_string)
@@ -114,13 +115,16 @@ def limpa_votacoesVotos(ano):
             'deputado_uri', 
             'deputado_nome',
             'deputado_idLegislatura',
-            'deputado_urlFoto'
+            'deputado_urlFoto',
+            'deputado_siglaPartido',
+            'deputado_uriPartido',
+            'deputado_siglaUf'
             ]
 
     votacoesVotos.drop(to_drop, inplace=True, axis=1)
 
     votacoesVotos = votacoesVotos.applymap(limpa_string)
-    votacoesVotos.rename(columns={ 'deputado_uriPartido' : 'pardido_id' }, inplace=True)
+    #votacoesVotos.rename(columns={ 'deputado_uriPartido' : 'pardido_id' }, inplace=True)
 
     votacoesVotos.dropna(inplace=True,axis=0)
 

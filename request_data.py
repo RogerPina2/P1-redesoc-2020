@@ -37,7 +37,7 @@ def main():
             url = urls[i].format(nomes[i])
             r = requests.get(url, allow_redirects=True)
             open(path + '/' + nomes[i], 'wb').write(r.content)
-            print(nomes[i])
+            print(" ", nomes[i])
     
 
     for ano in range(ano_inicial, ano_final+1):
@@ -48,7 +48,7 @@ def main():
                 url = urls[i].format(nome)
                 r = requests.get(url, allow_redirects=True)
                 open(path + '/' + nome, 'wb').write(r.content)
-                print(nome)
+                print(" ", nome)
 
     print("Requests finalizadas") 
     print("---------------------")

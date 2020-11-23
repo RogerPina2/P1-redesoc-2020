@@ -13,16 +13,16 @@ def main():
     files = os.listdir(path)
 
     nomes = [
-        'frentes.csv', 
+        'frentesDeputados.csv', 
         'deputados.csv', 
         'proposicoes-{}.csv',  
         'proposicoesAutores-{}.csv', 
         'votacoes-{}.csv', 
         'votacoesVotos-{}.csv'
     ]
-
+    
     urls = [
-        'https://dadosabertos.camara.leg.br/arquivos/frentes/csv/{}',
+        'https://dadosabertos.camara.leg.br/arquivos/frentesDeputados/csv/{}',
         'https://dadosabertos.camara.leg.br/arquivos/deputados/csv/{}',
         'https://dadosabertos.camara.leg.br/arquivos/proposicoes/csv/{}',
         'https://dadosabertos.camara.leg.br/arquivos/proposicoesAutores/csv/{}',

@@ -6,11 +6,12 @@ from constantes import ano_final, ano_inicial
 
 def main():
 
-    proposicoes = []
-    votacoes = []
-    votacoesVotos = []
+    
 
     for legislacao in range(ano_inicial, ano_final+1, 4):
+        proposicoes = []
+        votacoes = []
+        votacoesVotos = []
         inicio = str(legislacao)
         fim = str(legislacao+3)
         for ano in range(legislacao, legislacao+4):
@@ -31,9 +32,9 @@ def main():
         votacoes.to_csv('ArquivosLimpos/votacoes-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
         votacoesVotos.to_csv('ArquivosLimpos/votacoesVotos-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
 
-        proposicoes = []
-        votacoes = []
-        votacoesVotos = []
+
+    print("Legislatura")
+    print("---------------------")
 
 if __name__ == '__main__':
     main()

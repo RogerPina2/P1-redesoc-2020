@@ -42,9 +42,7 @@ def main():
         ec = nx.eigenvector_centrality(g, max_iter=10000)
         rm = nx.reciprocity(g)
 
-        print("----------------------")
         print("Reciprocity {}-{}: {}".format(inicio, fim, rm))
-        print("----------------------")
 
         deputados = pd.read_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv')
 
@@ -58,6 +56,9 @@ def main():
 
 
         deputados_final.to_csv('ArquivosLimpos/deputados-' + inicio + '-' + fim + '.csv', encoding='utf-8', index=False)
+
+    print("Gml para rede")
+    print("---------------------") 
 
 if __name__ == '__main__':
     main()

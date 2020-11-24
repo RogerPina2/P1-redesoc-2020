@@ -144,5 +144,8 @@ def main():
         relaciona(inicio, fim ,deputados, votacoes) 
         cria_gml(inicio, fim, deputados)           
 
+    print("Build finalizado") 
+    print("---------------------")
+    
 if __name__ == '__main__':
     main()

@@ -32,7 +32,12 @@ def limpa_string(item):
             return 0
         elif item == "Artigo 17":
             return 0
+        elif item == "Favorável com restrições":
+            return 0
+        elif item == "Branco":
+            return 0
         else:
+            #print(item)
             return unidecode(item)
     else:
         return item
@@ -215,10 +220,17 @@ def get_legislatura(ano):
 def main():
 
     limpa_deputados(ano_inicial, ano_final)
+    print("limpa_deputados")
     limpa_todas_votacoes(ano_inicial, ano_final)
+    print("limpa_todas_votacoes")
     limpa_todas_votacoesVotos(ano_inicial, ano_final)
+    print("limpa_todas_votacoesVotos")
     limpa_todas_proposicoesAutores(ano_inicial, ano_final)
+    print("limpa_todas_proposicoesAutores")
     limpa_frentes(ano_inicial, ano_final)
+    print("limpa_frentes")
+    print("Limpeza completa")
+    print("---------------------")
 
 if __name__ == '__main__':
     main()

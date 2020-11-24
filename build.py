@@ -193,6 +193,7 @@ def cria_gml(inicio, fim, deputados):
         # Última linha, que fecha os colchetes da rede.
         file.write(']\n') 
 
+
 def main():
 
     for legislacao in range(ano_inicial, ano_final+1, 4):
@@ -203,7 +204,10 @@ def main():
         proposicoes = extrai_proposicoesAutores(inicio, fim)
         votacoes = extrai_votacoes(inicio, fim)
         relaciona(inicio, fim ,deputados, proposicoes, votacoes)    
-        cria_gml(inicio, fim, deputados)           
+        cria_gml(inicio, fim, deputados)    
+
+    print("Build finalizado") 
+    print("---------------------")       
 
 if __name__ == '__main__':
     main()
